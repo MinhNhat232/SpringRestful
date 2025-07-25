@@ -35,4 +35,9 @@ public class UserService {
         // Here you can add any business logic before retrieving all users
         return this.userRepository.findAll();
     }
+
+    public User findByUsername(String username) {
+        // Here you can add any business logic before finding the user by email
+        return this.userRepository.findByEmail(username);
+    }
 }

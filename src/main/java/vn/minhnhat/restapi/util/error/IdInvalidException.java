@@ -1,4 +1,4 @@
-package vn.minhnhat.restapi.service.error;
+package vn.minhnhat.restapi.util.error;
 
 public class IdInvalidException extends Exception {
 
