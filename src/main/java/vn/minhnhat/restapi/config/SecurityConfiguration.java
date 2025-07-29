@@ -43,7 +43,8 @@ public class SecurityConfiguration {
     public SecurityFilterChain filterChain(HttpSecurity http,
             CustomAuthenticationEntryPoint customAuthenticationEntryPoint) throws Exception {
         http
-                .csrf(c -> c.disable()) // Disable CSRF for simplicity, not recommended for production
+                .csrf(c -> c.disable())
+                .cors(Customizer.withDefaults()) // Disable CSRF for simplicity, not recommended for production
                 .authorizeHttpRequests(
                         auth -> auth
                                 .requestMatchers("/", "/login").permitAll() // Allow all requests to / and /login
@@ -51,8 +52,9 @@ public class SecurityConfiguration {
                 )
                 .oauth2ResourceServer((oauth2) -> oauth2.jwt(Customizer.withDefaults())
                         .authenticationEntryPoint(customAuthenticationEntryPoint)) // Use custom entry point for JWT
-                .exceptionHandling(ex -> ex.authenticationEntryPoint(new BearerTokenAuthenticationEntryPoint()) // 401
-                        .accessDeniedHandler(new BearerTokenAccessDeniedHandler())) // 403
+                // .exceptionHandling(ex -> ex.authenticationEntryPoint(new
+                // BearerTokenAuthenticationEntryPoint()) // 401
+                // .accessDeniedHandler(new BearerTokenAccessDeniedHandler())) // 403
                 .formLogin(f -> f.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)); // Use
                                                                                                                // stateless

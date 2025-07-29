@@ -2,9 +2,13 @@ package vn.minhnhat.restapi.service;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import vn.minhnhat.restapi.domain.User;
+import vn.minhnhat.restapi.domain.dto.Meta;
+import vn.minhnhat.restapi.domain.dto.ResultPaginationDTO;
 import vn.minhnhat.restapi.repository.UserRepository;
 
 @Service
@@ -31,9 +35,18 @@ public class UserService {
         return this.userRepository.findById(id).orElse(null);
     }
 
-    public List<User> getAllUsers(User user) {
+    public ResultPaginationDTO getAllUsers(Pageable pageable) {
         // Here you can add any business logic before retrieving all users
-        return this.userRepository.findAll();
+        Page<User> pageUser = this.userRepository.findAll(pageable);
+        ResultPaginationDTO result = new ResultPaginationDTO();
+        Meta mt = new Meta();
+        mt.setPage(pageUser.getNumber());
+        mt.setPageSize(pageUser.getSize());
+        mt.setPages(pageUser.getTotalPages());
+        mt.setTotal(pageUser.getTotalElements());
+        result.setMeta(mt);
+        result.setResult(pageUser.getContent());
+        return result;
     }
 
     public User findByUsername(String username) {

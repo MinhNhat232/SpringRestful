@@ -10,6 +10,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
 import jakarta.servlet.http.HttpServletResponse;
 import vn.minhnhat.restapi.domain.RestResponse;
+import vn.minhnhat.restapi.util.annotation.ApiMessage;
 
 @ControllerAdvice
 public class FormatRestResponse implements ResponseBodyAdvice<Object> {
@@ -37,9 +38,9 @@ public class FormatRestResponse implements ResponseBodyAdvice<Object> {
         if (status >= 400) {
             return body;
         } else {
-
             restResponse.setData(body);
-            restResponse.setMessage("Success");
+            ApiMessage message = returnType.getMethodAnnotation(ApiMessage.class);
+            restResponse.setMessage(message != null ? message.value() : "Success");
         }
         return restResponse; // Here you can format the response body as needed
     }
