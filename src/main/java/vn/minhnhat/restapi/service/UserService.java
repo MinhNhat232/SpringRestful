@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 
 import vn.minhnhat.restapi.domain.Company;
 import vn.minhnhat.restapi.domain.User;
-import vn.minhnhat.restapi.domain.dto.Meta;
 import vn.minhnhat.restapi.domain.dto.ResCreateUserDTO;
 import vn.minhnhat.restapi.domain.dto.ResUpdateUserDTO;
 import vn.minhnhat.restapi.domain.dto.ResUserDTO;
@@ -90,7 +89,7 @@ public class UserService {
         // Here you can add any business logic before retrieving all users
         Page<User> pUser = this.userRepository.findAll(spec, pageable);
         ResultPaginationDTO result = new ResultPaginationDTO();
-        Meta mt = new Meta();
+        ResultPaginationDTO.Meta mt = new ResultPaginationDTO.Meta();
         mt.setPage(pageable.getPageNumber() + 1);
         mt.setPageSize(pageable.getPageSize());
         mt.setPages(pUser.getTotalPages());

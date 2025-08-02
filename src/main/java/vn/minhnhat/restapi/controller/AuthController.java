@@ -18,8 +18,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
 import vn.minhnhat.restapi.domain.User;
-import vn.minhnhat.restapi.domain.dto.ReqLoginDTO;
 import vn.minhnhat.restapi.domain.dto.ResLoginDTO;
+import vn.minhnhat.restapi.domain.request.ReqLoginDTO;
 import vn.minhnhat.restapi.service.UserService;
 import vn.minhnhat.restapi.util.SecurityUtil;
 import vn.minhnhat.restapi.util.annotation.ApiMessage;

@@ -1,4 +1,4 @@
-package vn.minhnhat.restapi.domain.dto;
+package vn.minhnhat.restapi.domain.request;
 
 import jakarta.validation.constraints.NotBlank;
 

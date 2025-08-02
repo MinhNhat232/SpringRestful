@@ -1,14 +1,11 @@
 package vn.minhnhat.restapi.service;
 
-import java.util.List;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import vn.minhnhat.restapi.domain.Company;
-import vn.minhnhat.restapi.domain.dto.Meta;
 import vn.minhnhat.restapi.domain.dto.ResultPaginationDTO;
 import vn.minhnhat.restapi.repository.CompanyRepository;
 
@@ -33,7 +30,7 @@ public class CompanyService {
     public ResultPaginationDTO getAllCompanies(Specification<Company> spec, Pageable pageable) {
         Page<Company> pCompany = this.companyRepository.findAll(spec, pageable);
         ResultPaginationDTO result = new ResultPaginationDTO();
-        Meta meta = new Meta();
+        ResultPaginationDTO.Meta meta = new ResultPaginationDTO.Meta();
         meta.setPage(pageable.getPageNumber() + 1);
         meta.setPageSize(pageable.getPageSize());
         meta.setPages(pCompany.getTotalPages());
