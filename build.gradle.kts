@@ -27,7 +27,14 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation("org.springframework.boot:spring-boot-starter-oauth2-resource-server")
 	implementation("org.thymeleaf.extras:thymeleaf-extras-springsecurity6")
-	implementation("com.turkraft:spring-filter:1.0.0")
+	implementation("com.turkraft.springfilter:jpa:3.1.9")
+    implementation("com.turkraft.springfilter:core:3.1.9")
+
+
+
+
+
+
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
 	runtimeOnly("com.mysql:mysql-connector-j")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")

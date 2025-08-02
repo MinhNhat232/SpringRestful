@@ -12,18 +12,29 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import vn.minhnhat.restapi.domain.RestResponse;
 
 @RestControllerAdvice
 public class GlobalException {
     @ExceptionHandler(value = { UsernameNotFoundException.class,
-            BadCredentialsException.class })
+            BadCredentialsException.class, IdInvalidException.class })
     public ResponseEntity<RestResponse<Object>> handleIdInvalidException(Exception ex) {
         RestResponse<Object> restResponse = new RestResponse<Object>();
         restResponse.setStatusCode(HttpStatus.BAD_REQUEST.value());
         restResponse.setError(ex.getMessage());
         restResponse.setMessage("Exeoption occurs...");
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(restResponse);
+    }
+
+    @ExceptionHandler(value = { NoResourceFoundException.class })
+
+    public ResponseEntity<RestResponse<Object>> handleNotFoundException(Exception ex) {
+        RestResponse<Object> restResponse = new RestResponse<Object>();
+        restResponse.setStatusCode(HttpStatus.NOT_FOUND.value());
+        restResponse.setError(ex.getMessage());
+        restResponse.setMessage("404 Not Found. Resource not exist");
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(restResponse);
     }
 

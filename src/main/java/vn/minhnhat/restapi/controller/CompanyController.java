@@ -43,7 +43,8 @@ public class CompanyController {
 
     @GetMapping("/companies")
     @ApiMessage("List of companies retrieved successfully")
-    public ResponseEntity<ResultPaginationDTO> getAllCompanies(@Filter Specification<Company> spec, Pageable pageable) {
+    public ResponseEntity<ResultPaginationDTO> fetchAllCompanies(@Filter Specification<Company> spec,
+            Pageable pageable) {
         return ResponseEntity.ok(this.companyService.getAllCompanies(spec, pageable));
     }
 
@@ -58,6 +59,7 @@ public class CompanyController {
     public ResponseEntity<String> deleteCompany(@PathVariable("id") long id) {
         this.companyService.handleDeleteCompany(id);
         return ResponseEntity.ok("Company deleted successfully");
+
     }
 
     @PutMapping("/companies/{id}")

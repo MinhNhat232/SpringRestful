@@ -47,7 +47,8 @@ public class SecurityConfiguration {
                 .cors(Customizer.withDefaults()) // Disable CSRF for simplicity, not recommended for production
                 .authorizeHttpRequests(
                         auth -> auth
-                                .requestMatchers("/", "/login").permitAll() // Allow all requests to / and /login
+                                .requestMatchers("/", "/api/v1/auth/login").permitAll() // Allow all requests to / and
+                                                                                        // /login
                                 .anyRequest().authenticated() // All other requests require authentication
                 )
                 .oauth2ResourceServer((oauth2) -> oauth2.jwt(Customizer.withDefaults())
@@ -68,7 +69,7 @@ public class SecurityConfiguration {
     public JwtAuthenticationConverter jwtAuthenticationConverter() {
         JwtGrantedAuthoritiesConverter grantedAuthoritiesConverter = new JwtGrantedAuthoritiesConverter();
         grantedAuthoritiesConverter.setAuthorityPrefix("");
-        grantedAuthoritiesConverter.setAuthoritiesClaimName("mn7"); // Change to your custom claim name
+        grantedAuthoritiesConverter.setAuthoritiesClaimName("permissions"); // Change to your custom claim name
 
         JwtAuthenticationConverter jwtAuthenticationConverter = new JwtAuthenticationConverter();
         jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(grantedAuthoritiesConverter);
