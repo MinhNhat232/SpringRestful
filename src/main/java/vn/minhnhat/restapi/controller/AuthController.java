@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
 import vn.minhnhat.restapi.domain.User;
-import vn.minhnhat.restapi.domain.dto.LoginDTO;
+import vn.minhnhat.restapi.domain.dto.ReqLoginDTO;
 import vn.minhnhat.restapi.domain.dto.ResLoginDTO;
 import vn.minhnhat.restapi.service.UserService;
 import vn.minhnhat.restapi.util.SecurityUtil;
@@ -44,7 +44,7 @@ public class AuthController {
     }
 
     @PostMapping("/auth/login")
-    public ResponseEntity<ResLoginDTO> login(@Valid @RequestBody LoginDTO loginDTO) {
+    public ResponseEntity<ResLoginDTO> login(@Valid @RequestBody ReqLoginDTO loginDTO) {
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
                 loginDTO.getUsername(), loginDTO.getPassword());
 
