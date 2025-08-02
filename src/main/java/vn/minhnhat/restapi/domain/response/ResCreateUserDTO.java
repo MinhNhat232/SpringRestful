@@ -1,4 +1,4 @@
-package vn.minhnhat.restapi.domain.dto;
+package vn.minhnhat.restapi.domain.response;
 
 import java.time.Instant;
 
@@ -8,12 +8,12 @@ import vn.minhnhat.restapi.util.constant.GenderEnum;
 
 @Getter
 @Setter
-public class ResUpdateUserDTO {
+public class ResCreateUserDTO {
     private long id;
     private String name;
     private String email;
     private GenderEnum gender;
     private String address;
     private int age;
-    private Instant updatedAt;
+    private Instant createdAt;
 }

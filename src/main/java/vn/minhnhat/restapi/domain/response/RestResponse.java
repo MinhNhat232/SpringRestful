@@ -1,4 +1,4 @@
-package vn.minhnhat.restapi.domain;
+package vn.minhnhat.restapi.domain.response;
 
 public class RestResponse<T> {
     private int statusCode;

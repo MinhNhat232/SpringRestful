@@ -27,7 +27,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 import com.nimbusds.jose.util.Base64;
 
-import vn.minhnhat.restapi.domain.dto.ResLoginDTO;
+import vn.minhnhat.restapi.domain.response.ResLoginDTO;
 
 @Service
 public class SecurityUtil {

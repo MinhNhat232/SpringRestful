@@ -6,7 +6,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import vn.minhnhat.restapi.domain.Company;
-import vn.minhnhat.restapi.domain.dto.ResultPaginationDTO;
+import vn.minhnhat.restapi.domain.response.ResultPaginationDTO;
 import vn.minhnhat.restapi.repository.CompanyRepository;
 
 @Service

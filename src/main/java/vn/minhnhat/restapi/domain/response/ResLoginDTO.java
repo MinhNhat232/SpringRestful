@@ -1,4 +1,4 @@
-package vn.minhnhat.restapi.domain.dto;
+package vn.minhnhat.restapi.domain.response;
 
 import lombok.Getter;
 import lombok.Setter;

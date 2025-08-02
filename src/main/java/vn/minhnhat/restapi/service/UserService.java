@@ -10,10 +10,10 @@ import org.springframework.stereotype.Service;
 
 import vn.minhnhat.restapi.domain.Company;
 import vn.minhnhat.restapi.domain.User;
-import vn.minhnhat.restapi.domain.dto.ResCreateUserDTO;
-import vn.minhnhat.restapi.domain.dto.ResUpdateUserDTO;
-import vn.minhnhat.restapi.domain.dto.ResUserDTO;
-import vn.minhnhat.restapi.domain.dto.ResultPaginationDTO;
+import vn.minhnhat.restapi.domain.response.ResCreateUserDTO;
+import vn.minhnhat.restapi.domain.response.ResUpdateUserDTO;
+import vn.minhnhat.restapi.domain.response.ResUserDTO;
+import vn.minhnhat.restapi.domain.response.ResultPaginationDTO;
 import vn.minhnhat.restapi.repository.UserRepository;
 
 @Service

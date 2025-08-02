@@ -6,7 +6,7 @@ import com.turkraft.springfilter.boot.Filter;
 
 import vn.minhnhat.restapi.domain.Company;
 import vn.minhnhat.restapi.domain.User;
-import vn.minhnhat.restapi.domain.dto.ResultPaginationDTO;
+import vn.minhnhat.restapi.domain.response.ResultPaginationDTO;
 import vn.minhnhat.restapi.service.CompanyService;
 import vn.minhnhat.restapi.util.annotation.ApiMessage;
 

@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
 import jakarta.servlet.http.HttpServletResponse;
-import vn.minhnhat.restapi.domain.RestResponse;
+import vn.minhnhat.restapi.domain.response.RestResponse;
 import vn.minhnhat.restapi.util.annotation.ApiMessage;
 
 @ControllerAdvice

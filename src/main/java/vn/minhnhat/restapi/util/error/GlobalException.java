@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 
-import vn.minhnhat.restapi.domain.RestResponse;
+import vn.minhnhat.restapi.domain.response.RestResponse;
 
 @RestControllerAdvice
 public class GlobalException {
