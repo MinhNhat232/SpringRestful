@@ -57,4 +57,13 @@ public class GlobalException {
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(res);
     }
+
+    @ExceptionHandler(value = { StorageException.class })
+    public ResponseEntity<RestResponse<Object>> handleFileUploadException(Exception ex) {
+        RestResponse<Object> restResponse = new RestResponse<Object>();
+        restResponse.setStatusCode(HttpStatus.BAD_REQUEST.value());
+        restResponse.setError(ex.getMessage());
+        restResponse.setMessage("Exception occurs when upload file...");
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(restResponse);
+    }
 }

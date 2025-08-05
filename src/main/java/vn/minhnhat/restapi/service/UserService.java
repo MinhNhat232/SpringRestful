@@ -1,6 +1,7 @@
 package vn.minhnhat.restapi.service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
@@ -21,12 +22,21 @@ public class UserService {
 
     private final UserRepository userRepository;
 
-    public UserService(UserRepository userRepository) {
+    private final CompanyService companyService;
+
+    public UserService(UserRepository userRepository, CompanyService companyService) {
         this.userRepository = userRepository;
+        this.companyService = companyService;
     }
 
     public User handleSaveUser(User user) {
-        // Here you can add any business logic before saving the user
+
+        // check company
+        if (user.getCompany() != null) {
+            Optional<Company> company = Optional.of((this.companyService.getCompanyById(user.getCompany().getId())));
+            user.setCompany(company.isPresent() ? company.get() : null);
+        }
+
         return this.userRepository.save(user);
     }
 
@@ -49,6 +59,7 @@ public class UserService {
     public ResCreateUserDTO convertToResCreateUserDTO(User user) {
         // Convert User to ResCreateUserDTO
         ResCreateUserDTO resCreateUserDTO = new ResCreateUserDTO();
+        ResCreateUserDTO.CompanyUser companyUser = new ResCreateUserDTO.CompanyUser();
         resCreateUserDTO.setId(user.getId());
         resCreateUserDTO.setName(user.getName());
         resCreateUserDTO.setEmail(user.getEmail());
@@ -56,12 +67,23 @@ public class UserService {
         resCreateUserDTO.setAddress(user.getAddress());
         resCreateUserDTO.setAge(user.getAge());
         resCreateUserDTO.setCreatedAt(user.getCreatedAt());
+        if (user.getCompany() != null) {
+            companyUser.setId(user.getCompany().getId());
+            companyUser.setName(user.getCompany().getName());
+            resCreateUserDTO.setCompany(companyUser);
+        }
         return resCreateUserDTO;
     }
 
     public ResUpdateUserDTO convertToUpdateResUserDTO(User user) {
         // Convert User to ResUserDTO
         ResUpdateUserDTO resUpdateUserDTO = new ResUpdateUserDTO();
+        ResUpdateUserDTO.CompanyUser companyUser = new ResUpdateUserDTO.CompanyUser();
+        if (user.getCompany() != null) {
+            companyUser.setId(user.getCompany().getId());
+            companyUser.setName(user.getCompany().getName());
+            resUpdateUserDTO.setCompany(companyUser);
+        }
         resUpdateUserDTO.setId(user.getId());
         resUpdateUserDTO.setName(user.getName());
         resUpdateUserDTO.setEmail(user.getEmail());
@@ -75,6 +97,13 @@ public class UserService {
     public ResUserDTO convertToResUserDTO(User user) {
         // Convert User to ResUpdateUserDTO
         ResUserDTO resUserDTO = new ResUserDTO();
+        ResUserDTO.CompanyUser companyUser = new ResUserDTO.CompanyUser();
+        if (user.getCompany() != null) {
+            companyUser.setId(user.getCompany().getId());
+            companyUser.setName(user.getCompany().getName());
+            resUserDTO.setCompany(companyUser);
+        }
+
         resUserDTO.setId(user.getId());
         resUserDTO.setName(user.getName());
         resUserDTO.setEmail(user.getEmail());
@@ -105,7 +134,10 @@ public class UserService {
                         item.getAddress(),
                         item.getAge(),
                         item.getUpdatedAt(),
-                        item.getCreatedAt()))
+                        item.getCreatedAt(),
+                        new ResUserDTO.CompanyUser(
+                                item.getCompany() != null ? item.getCompany().getId() : 0,
+                                item.getCompany() != null ? item.getCompany().getName() : null)))
                 .collect(Collectors.toList());
         result.setResult(listUser);
         return result;
@@ -123,8 +155,16 @@ public class UserService {
             currentUser.setGender(user.getGender());
             currentUser.setAddress(user.getAddress());
             currentUser.setAge(user.getAge());
+
+            if (user.getCompany() != null) {
+                Optional<Company> company = Optional
+                        .of((this.companyService.getCompanyById(user.getCompany().getId())));
+                user.setCompany(company.isPresent() ? company.get() : null);
+            }
+
+            currentUser = this.userRepository.save(currentUser);
         }
-        currentUser = this.userRepository.save(currentUser);
+
         return currentUser;
 
     }
