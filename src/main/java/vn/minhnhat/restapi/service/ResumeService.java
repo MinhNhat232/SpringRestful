@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 import vn.minhnhat.restapi.domain.Job;
 import vn.minhnhat.restapi.domain.Resume;
 import vn.minhnhat.restapi.domain.User;
-import vn.minhnhat.restapi.domain.response.ResUserDTO;
 import vn.minhnhat.restapi.domain.response.ResultPaginationDTO;
 import vn.minhnhat.restapi.domain.resume.ResCreateResumeDTO;
 import vn.minhnhat.restapi.domain.resume.ResGetResumeDTO;
