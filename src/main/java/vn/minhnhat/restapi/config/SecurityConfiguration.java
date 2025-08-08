@@ -47,9 +47,10 @@ public class SecurityConfiguration {
                 .cors(Customizer.withDefaults()) // Disable CSRF for simplicity, not recommended for production
                 .authorizeHttpRequests(
                         auth -> auth
-                                .requestMatchers("/", "/api/v1/auth/login", "/storage/**").permitAll() // Allow all
-                                                                                                       // requests to /
-                                                                                                       // and
+                                .requestMatchers("/", "/api/v1/auth/login", "/storage/**,/api/v1/auth/register")
+                                .permitAll() // Allow all
+                                // requests to /
+                                // and
                                 // /login
                                 .anyRequest().authenticated() // All other requests require authentication
                 )

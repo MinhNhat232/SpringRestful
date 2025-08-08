@@ -2,12 +2,14 @@ package vn.minhnhat.restapi.controller;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import jakarta.validation.Valid;
 import vn.minhnhat.restapi.domain.User;
 import vn.minhnhat.restapi.domain.request.ReqLoginDTO;
+import vn.minhnhat.restapi.domain.response.ResCreateUserDTO;
 import vn.minhnhat.restapi.domain.response.ResLoginDTO;
 import vn.minhnhat.restapi.service.UserService;
 import vn.minhnhat.restapi.util.SecurityUtil;
@@ -32,15 +35,17 @@ public class AuthController {
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final SecurityUtil securityUtil;
     private final UserService userService;
+    private final PasswordEncoder passwordEncoder;
 
     @Value("${mn7.jwt.refresh-token-validity-in-seconds}")
     private long refreshTokenExpiration;
 
     public AuthController(AuthenticationManagerBuilder authenticationManagerBuilder, SecurityUtil securityUtil,
-            UserService userService) {
+            UserService userService, PasswordEncoder passwordEncoder) {
         this.authenticationManagerBuilder = authenticationManagerBuilder;
         this.securityUtil = securityUtil;
         this.userService = userService;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @PostMapping("/auth/login")
@@ -55,17 +60,19 @@ public class AuthController {
 
         User currentUserDB = this.userService.findByUsername(loginDTO.getUsername());
         if (currentUserDB != null) {
-            ResLoginDTO.UserLogin userLogin = new ResLoginDTO.UserLogin();
-            userLogin.setId(currentUserDB.getId());
-            userLogin.setEmail(currentUserDB.getEmail());
-            userLogin.setName(currentUserDB.getName());
+            ResLoginDTO.UserLogin userLogin = new ResLoginDTO.UserLogin(
+                    currentUserDB.getId(),
+                    currentUserDB.getEmail(),
+                    currentUserDB.getName(),
+                    currentUserDB.getRole());
+
             resLoginDTO.setUser(userLogin);
         } else {
             return ResponseEntity.status(404).body(null); // User not found
         }
 
         // Create access token
-        String accessToken = this.securityUtil.createAccessToken(authentication.getName(), resLoginDTO.getUser());
+        String accessToken = this.securityUtil.createAccessToken(authentication.getName(), resLoginDTO);
 
         resLoginDTO.setAccessToken(accessToken);
 
@@ -90,7 +97,7 @@ public class AuthController {
     }
 
     @GetMapping("/auth/account")
-    public ResponseEntity<ResLoginDTO.UserLogin> getCurrentUser() {
+    public ResponseEntity<ResLoginDTO.UserGetAccount> getCurrentUser() {
         String currentUserEmail = SecurityUtil.getCurrentUserLogin().orElse(null);
         if (currentUserEmail == null) {
             return ResponseEntity.status(401).body(null); // Unauthorized
@@ -102,11 +109,30 @@ public class AuthController {
         }
 
         ResLoginDTO.UserLogin userLogin = new ResLoginDTO.UserLogin();
+        ResLoginDTO.UserGetAccount userGetAccount = new ResLoginDTO.UserGetAccount();
         userLogin.setId(currentUser.getId());
         userLogin.setEmail(currentUser.getEmail());
         userLogin.setName(currentUser.getName());
+        userLogin.setRole(currentUser.getRole());
 
-        return ResponseEntity.ok().body(userLogin);
+        userGetAccount.setUser(userLogin);
+
+        return ResponseEntity.ok().body(userGetAccount);
+    }
+
+    @PostMapping("/auth/register")
+    public ResponseEntity<ResCreateUserDTO> register(@Valid @RequestBody User user) throws IdInvalidException {
+
+        boolean exists = this.userService.existsByEmail(user.getEmail());
+        if (exists) {
+            throw new IdInvalidException("Email " + user.getEmail() + " already exists");
+        }
+        String hashPassword = this.passwordEncoder.encode(user.getPassword());
+        user.setPassword(hashPassword);
+
+        User mnUser = this.userService.handleSaveUser(user);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(this.userService.convertToResCreateUserDTO(mnUser));
     }
 
     @GetMapping("/auth/refresh")
@@ -127,6 +153,7 @@ public class AuthController {
         }
 
         ResLoginDTO resLoginDTO = new ResLoginDTO();
+        ResLoginDTO.UserGetAccount userGetAccount = new ResLoginDTO.UserGetAccount();
 
         User currentUserDB = this.userService.findByUsername(email);
         if (currentUserDB != null) {
@@ -134,13 +161,14 @@ public class AuthController {
             userLogin.setId(currentUserDB.getId());
             userLogin.setEmail(currentUserDB.getEmail());
             userLogin.setName(currentUserDB.getName());
+            userLogin.setRole(currentUserDB.getRole());
             resLoginDTO.setUser(userLogin);
         } else {
             return ResponseEntity.status(404).body(null); // User not found
         }
 
         // Create access token
-        String accessToken = this.securityUtil.createAccessToken(email, resLoginDTO.getUser());
+        String accessToken = this.securityUtil.createAccessToken(email, resLoginDTO);
 
         resLoginDTO.setAccessToken(accessToken);
 
